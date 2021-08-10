@@ -115,7 +115,7 @@ fn gen_background_factorio(width: u32, height: u32, seed: u32) -> Result<Vec<u8>
 
 	web_sys::console::log_1(&"Background Factorio preloading images...".into());
 	assets.preload_images_starts_with("factorio")?;
-	let p = noise::Perlin::new().set_seed(seed);
+	let perlin = Perlin::new().set_seed(seed);
 	web_sys::console::log_1(&"Background Factorio generating ground...".into());
 	{
 		let dirts = [
@@ -162,7 +162,7 @@ fn gen_background_factorio(width: u32, height: u32, seed: u32) -> Result<Vec<u8>
 		// Render terrain
 		for x in (0..width).step_by(FACTORIO_TILE_SIZE as usize) {
 			for y in (0..height).step_by(FACTORIO_TILE_SIZE as usize) {
-				let v = p.get([x as f64 * 0.001, y as f64 * 0.001]);
+				let v = perlin.get([x as f64 * 0.001, y as f64 * 0.001]);
 				let tile = if v < 0.0 {
 					dirts[((-v * dirts.len() as f64) as usize).min(dirts.len() - 1)]
 				} else {
